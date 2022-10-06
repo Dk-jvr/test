@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -12,10 +13,15 @@ public class Movement : MonoBehaviour
     private bool _isMoving = false;
     [SerializeField]
     Camera _camera;
+    [SerializeField]
+    private GameObject _gameCanvas;
+    [SerializeField]
+    private Generation _gen;
+
 
     void Start()
     {
-        
+
     }
     void Update()
     {
@@ -26,6 +32,12 @@ public class Movement : MonoBehaviour
         }
         if (!_isMoving && vectors.Count > 0)
             StartCoroutine(Moving(vectors.Dequeue()));
+        if (_gen._count == _coinCount)
+        {
+            _gameCanvas.transform.GetChild(1).gameObject.SetActive(true);
+            _gameCanvas.transform.GetChild(1).gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "You win";
+            Time.timeScale = 0f;
+        }
 
     }
     IEnumerator Moving(Vector2 vector)
@@ -47,10 +59,13 @@ public class Movement : MonoBehaviour
         {
             Destroy(collision.gameObject);
             _coinCount += 1;
+            _gameCanvas.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Coin Count: " + _coinCount.ToString();
         }
         if(collision.tag == "spike")
         {
             Destroy(gameObject);
+            _gameCanvas.transform.GetChild(1).gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "You lose";
+            Time.timeScale = 0f;
         }
     }
 }
