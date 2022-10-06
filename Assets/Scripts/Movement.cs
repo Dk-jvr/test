@@ -64,6 +64,7 @@ public class Movement : MonoBehaviour
         if(collision.tag == "spike")
         {
             Destroy(gameObject);
+            _gameCanvas.transform.GetChild(1).gameObject.SetActive(true);
             _gameCanvas.transform.GetChild(1).gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "You lose";
             Time.timeScale = 0f;
         }
